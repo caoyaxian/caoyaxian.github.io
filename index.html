@@ -61,119 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-DOM Style样式对象说明(1)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/10/28/DOM Style样式对象说明(1)/" class="article-date">
-  <time datetime="2017-10-28T03:08:41.534Z" itemprop="datePublished">2017-10-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="DOM-Style样式对象的详细用法"><a href="#DOM-Style样式对象的详细用法" class="headerlink" title="DOM Style样式对象的详细用法"></a>DOM Style样式对象的详细用法</h1><h4 id="HTML-Style样式比较复杂，相应访问、修改方法也有所差异。整理如下："><a href="#HTML-Style样式比较复杂，相应访问、修改方法也有所差异。整理如下：" class="headerlink" title="HTML Style样式比较复杂，相应访问、修改方法也有所差异。整理如下："></a>HTML Style样式比较复杂，相应访问、修改方法也有所差异。整理如下：</h4><h3 id="典型HTML文件如下，有三种定义方式"><a href="#典型HTML文件如下，有三种定义方式" class="headerlink" title="典型HTML文件如下，有三种定义方式"></a>典型HTML文件如下，有三种定义方式</h3><pre><code>&lt;head&gt;
-    &lt;style type=&quot;text/css&quot;&gt;
-               /* 内部样式 */
-      h3 {color:green;}
-    &lt;/style&gt;
-            &lt;!-- 外部样式 style.css --&gt;
-    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;style.css&quot;/&gt;
-           &lt;!-- 在外部的styles.css文件中，代码如下:
-               h3 {color:blue;} --&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h3 style =&quot;color:Black;&quot; &gt;测试！&lt;/h3&gt;
-&lt;/body&gt;
-</code></pre><h3 id="定义一：行内样式，（内联样式）Inline-style"><a href="#定义一：行内样式，（内联样式）Inline-style" class="headerlink" title="定义一：行内样式，（内联样式）Inline style"></a>定义一：行内样式，（内联样式）Inline style</h3><p>任何HTML元素标签都会有一个通用的属性style。则它返回CSSStyleDeclaration对象。</p>
-<p>样式定义在HTML元素的标准属性style里</p>
-<p>a.  将分号【;】隔开的一个或者多个属性：值（其全部为元素的style属性的值）</p>
-<p>b. 属性和属性值之间用【：】连接<br>下面我们来看几个最常见的行内style样式的访问方式。style在元素节点内，style可读写；</p>
-<pre><code>&lt;div id=&apos;St1&apos; style=&quot;font-family:Arial,Helvetica;width:100px;height:100px; color:red;&quot;&gt;点击&lt;/div&gt;
-var oV1 = document.getElementById(&apos;St1&apos;)
-a)获取：x=oV1.Style.width
-   x = oV1.Style.getPropertyValue(&apos;height&apos;)
-b)设置： oV1.style.backgroundColor = &apos;red&apos;;
-　　  　oV1.Style.setProperty(&apos;height&apos;, &apos;200px&apos;)
-c)移出(2种)：oV1.style.font-family=&quot;&quot;;
-　 　　　   oV1.style.removeProperty(&quot;background-color&quot;)
-d)所有内联样式 CSS 属性
-style样式是个CSSStyleDeclaration对象，它不仅提供了单个CSS属性的访问方式，如cssText属性，也提供了setProperty()、getPropertyValue()及removeProperty()方法
-
-oV1.Style.cssText = &quot;background-color:red; height:200px; width: 200px&quot;
-
-oV1.Style.cssText = &apos;&apos;;
-
-oV1.setAttribute(&apos;style&apos;, &apos;background-color:blue; height:100px; width:100px&apos;);
-
-oV1.getAttribute(&apos;style&apos;);
-
-oV1.removeAttribute(&apos;style&apos;);
-</code></pre><p>仅能操作style属性中定义的内联样式，无法获取或设置样式表中的样式</p>
-<h3 id="定义2：内部样式表（style元素）-Internal-style-sheet"><a href="#定义2：内部样式表（style元素）-Internal-style-sheet" class="headerlink" title="定义2：内部样式表（style元素） Internal style sheet"></a>定义2：内部样式表（style元素） Internal style sheet</h3><p>其使用 <style> 标记将样式定义为内部块对象，内部样式只对所在的网页有效。</p>
-<p>示例代码如下： 嵌入 CSS 可以有效减少 HTTP 请求，提升页面性能</p>
-<head><br><style type="text/css"><br><br>     <!--
-      //div（选择器）  ｛width: 100px;（样式声明） ｝
-       div,h3 { background-color: black; width: 100px; }                   //两个标签选择符
-     #Id1   { width: 100px; height: 100px; background-color: red; }       //一个id选择符
-       .c3    { color:blue;}      //class选择符
-    p.cla4 { color:#fff; background:#070;}    /* 一个元素、一个class选择符
-     --><br>    </style><br>    <style type="text/css">  @import url(sty2.css); &lt; /style&gt;            //导入式<br>    <link rel="stylesheet" type="text/css"  href="wider.css">          //外部链接式(rel,type不要动)<br><br>    </head>
-
-
-<p>使用style属性可以设置行内的CSS样式，而通过id和class调用时最常用的方法。</p>
-<p> CSSStyleSheet类型表示通过<link>元素(HTMLLinkElement对象)和<style>元素(HTMLStyleElement对象)包含的样式表。</p>
-<p>样式表中一个大括号就是一个cssRule对象</p>
-<pre><code>var sheet=link.sheet||link.styleSheet;    //（非IE）使用sheet属性，（IE）使用styleSheet得到这个类型
-var sheet=document.styleSheets[i];       
-//styleSheets: 
-获得当前网页的所有样式表对象
-</code></pre><h3 id="定义3：外部样式表（引用一个CSS样式表文件）Rules或rules"><a href="#定义3：外部样式表（引用一个CSS样式表文件）Rules或rules" class="headerlink" title="定义3：外部样式表（引用一个CSS样式表文件）Rules或rules"></a>定义3：外部样式表（引用一个CSS样式表文件）Rules或rules</h3><h4 id="1-DOM-document对象-对象模型中有几个重要的集合"><a href="#1-DOM-document对象-对象模型中有几个重要的集合" class="headerlink" title="(1)  DOM(document对象)对象模型中有几个重要的集合"></a>(1)  DOM(document对象)对象模型中有几个重要的集合</h4><pre><code>doc1.images         [HTMLCollection] 所有图像
-doc1.anchors        [HTMLCollection] 所有锚点
-doc1.styleSheets  [StyleSheetList] 所有样式
-doc1.links          [HTMLCollection] 所有链接
-其中styleSheets包含所有的样式集合
-</code></pre><h4 id="2-样式表集合styleSheets-gt-规则（选择器及样式）-css-rules-gt-某一样式-属性-style-attr"><a href="#2-样式表集合styleSheets-gt-规则（选择器及样式）-css-rules-gt-某一样式-属性-style-attr" class="headerlink" title="(2) 样式表集合styleSheets -&gt; 规则（选择器及样式）(css)rules -&gt;某一样式.属性 style.attr"></a>(2) 样式表集合styleSheets -&gt; 规则（选择器及样式）(css)rules -&gt;某一样式.属性 style.attr</h4><p>一个style元素标签(一个样式表)  </p>
-<pre><code>var sheet=document.styleSheets[0]
-规则集合（选择器及样式集合）  
- vsr Rules =sheet.cssRules||sheet[0].rules;   //W3C用cssRules //微软rules
-第一个规则（选择器及样式）    
- var rule=doc1.styleSheets[0].rules[0]   //rules[0]（IE）,CSSRules[0]（非IE）
-  var rule=sheet.cssRules[0]|| sheet.rules[0];
-style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 或 rules[0].style.cssText      
-</code></pre><p>style标签中一个大括号就是一个（css）Rule对象，cssRules（非IE）|rules（IE）可返回某一样式表中全部选择器的集合列表,可以通过CSSRules[0]（非IE）和rules[0]属性（IE）来进行访问。第一条规则就是(css)Rules[0]，第二条就是(css)Rules[1]等等。</p>
-<p>一条规则就是一个元素的声明 p {background-color: #ffffff;} 或者多个元素的一组声明 div,h3，p{color:blue;width: 100px;} （IE还将其分为3条）。可以对每个样式进行具体的操作（可读可写）。</p>
-<h4 id="3-style样式的添加或删除"><a href="#3-style样式的添加或删除" class="headerlink" title="(3) style样式的添加或删除"></a>(3) style样式的添加或删除</h4><p>a) 插入函数</p>
-<pre><code>function insertRule(sheet,selectorText,cssText,position){
-  if(sheet.insertRule){             sheet.insertRule(selectorText+&apos;{&apos;+cssText+&apos;}&apos;,position);     }
-  else if(sheet.addRule){  sheet.addRule(selectorText,cssText,position);     } 
-</code></pre><p>b) 删除函数</p>
-<pre><code>function deleteRule(sheet,position){ 
- if (sheet.deleteRule) {  
-   sheet.deleteRule(position); //非IE ,假设这样的方式存在
- else if(sheet.removeRule){  sheet.removeRule(position);  } 
-</code></pre><p>c) 赋值，改动CSS样式</p>
-<pre><code>rules[0].style.color=&apos;green&apos;;   //链接CSS样式中改动详细的属性
- oDiv1.style.color=&apos;blue&apos;;       //行内样式　
-</code></pre></style></p>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/28/DOM Style样式对象说明(1)/" data-id="cj9ar25hk0001hgtx6b5ndpw0" class="article-share-link">Partager</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-DOM Style样式对象说明" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/10/28/DOM Style样式对象说明/" class="article-date">
-  <time datetime="2017-10-28T03:08:31.718Z" itemprop="datePublished">2017-10-28</time>
+  <time datetime="2017-10-28T03:13:15.450Z" itemprop="datePublished">2017-10-28</time>
 </a>
     
   </div>
@@ -269,7 +160,7 @@ style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/28/DOM Style样式对象说明/" data-id="cj9ar25hc0000hgtxxq1kzbbu" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2017/10/28/DOM Style样式对象说明/" data-id="cj9ar55s50000fktxq8m3vtol" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -314,7 +205,7 @@ style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/14/hello-world/" data-id="cj9ar25i90002hgtxea25lchq" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2017/10/14/hello-world/" data-id="cj9ar55t10001fktxnhmojt94" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -352,10 +243,6 @@ style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 
     <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2017/10/28/DOM Style样式对象说明(1)/">(no title)</a>
-          </li>
         
           <li>
             <a href="/2017/10/28/DOM Style样式对象说明/">(no title)</a>
