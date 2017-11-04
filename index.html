@@ -61,6 +61,208 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-函数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/04/函数/" class="article-date">
+  <time datetime="2017-11-04T01:27:50.829Z" itemprop="datePublished">2017-11-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/04/函数/">函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="声明函数"><a href="#声明函数" class="headerlink" title="声明函数"></a>声明函数</h3><p><strong>普通的声明方式</strong></p>
+<pre><code>function myfun(m,n){
+        alert(m+n);
+    }
+    myfun(3,5);
+</code></pre><p><strong>通过变量初始化函数</strong></p>
+<pre><code>var fu=function(m,n){
+        alert(m+n);
+    }
+    fu(3,4);
+</code></pre><p><strong>使用构造函数来声明</strong></p>
+<pre><code>var nfun=new Function(&quot;m&quot;,&quot;n&quot;,&quot;alert(m+n)&quot;)
+    nfun(3,2);
+</code></pre><p><strong>将函数作为另一个函数的参数</strong></p>
+<pre><code>&lt;script&gt;
+    //将函数作为另一个函数的参数
+    function test1(){
+        alert(&quot;我是Test1&quot;);
+    }
+    function test2(f){
+        f()
+    }
+    test2(test1);
+&lt;/script&gt;
+</code></pre><p><strong>将函数作为参数</strong></p>
+<pre><code>&lt;script&gt;
+    //将函数作为参数
+    function test(x,u){
+        return x+fu()
+    }
+    function fu(){
+        return 100
+    }
+    alert(test(10,fu));
+&lt;/script&gt;
+</code></pre><p><strong>将有参函数作为参数</strong></p>
+<pre><code>&lt;script&gt;
+     //将有参函数作为参数
+     function test2(x,u){
+        return x+u(x);
+    }
+    function fu(x){
+        return x*x
+    }
+
+    alert(test2(10,fu));
+&lt;/script&gt;
+</code></pre><p><strong>使用函数的返回值作为另一个函数的参数</strong></p>
+<pre><code>&lt;script&gt;
+    //使用函数的返回值做为另一个函数的参数
+    function fu(x){
+        return x*x
+    }
+    function test(x,u){
+        return x+u
+    }
+    alert(test(10,fu(10))); //弹出110
+    alert(fu(10));//在这里fu(10)引用的是函数的返回值   弹出100———10*10
+    alert(fu);//这里fu引用的是函数的本身    弹出函数的本身 function fu(x){return x*x}
+</code></pre><h3 id="函数的内部属性"><a href="#函数的内部属性" class="headerlink" title="函数的内部属性"></a>函数的内部属性</h3><p> <strong>在函数内部有两个特殊对象：arguments和this</strong></p>
+<ol>
+<li><p>arguments 引用属性 arguments.length检测函数的参数个数</p>
+<pre><code> function sum(){
+     alert(arguments.length);
+ }
+//sum();//---&gt;弹出0
+//sum(12);//---&gt;弹出1
+sum(12,3);//---&gt;弹出2
+</code></pre><p>参数求和：</p>
+<pre><code> function sum(){
+    alert(arguments.length);
+    var result=0;
+    for(var i=0;i&lt;arguments.length;i++){
+        result+=arguments[i];
+    }
+    return result;
+}
+alert(sum(12,3,5));
+</code></pre><p>2.this是JavaScript语言的一个关键字它代表函数运行时，自动生成的一个内部对象，this指调用函数的那个对象</p>
+</li>
+</ol>
+<p>3.this跟函数在哪定义无关，函数在哪调用才决定了this到底引用的是什么</p>
+<p>4.在函数外部使用this，this就指的是window对象，例如：alert（this）</p>
+<pre><code>&lt;script&gt;
+    //全局变量可看做window对象的属性
+    var x=1;
+    alert(window.x);//alert(this.x)
+    //2.在函数内部调用
+    var x=1; //定义的全局变量
+    function test(){
+        var x=0;
+        alert(x);//这里x为0
+        alert(this.x);//这里x为1
+        alert(this);
+    }
+    //用new来调用
+    function test2(){
+        this.x=100;
+    }
+    var obj=new test2();
+    alert(x);//这里x为1
+    alert(obj.x);//这里x为100
+    //作为某个对象的方法调用这时this指这个上级对象
+    function test3(){
+        alert(this.x);
+    }
+    var objo={};
+    objo.x=1000;
+    objo.m=test3;
+    alert(x);
+    objo.m();//1000
+    //事件监听函数中的this
+    var div1=document.getElementById(&quot;div1&quot;);
+    div1.onclick=function(){
+        alert(this.innerHTML);//this指向div元素
+    }
+&lt;/script&gt;
+</code></pre><h3 id="函数的属性和方法"><a href="#函数的属性和方法" class="headerlink" title="函数的属性和方法"></a>函数的属性和方法</h3><ol>
+<li>每个函数都包含两个属性：length和prototype</li>
+<li>每个函数都包含两个非继承而来的方法：apply()和call()。</li>
+</ol>
+<pre><code>&lt;script&gt;
+//length当前函数希望接受的命名参数的个数
+    function test(num1,num2,num3){
+        alert(test.length);//弹出三个参数
+        alert(arguments.length)//注意arguments是实际传入的参数
+    }
+    tsst(10,20)
+&lt;/script&gt;
+</code></pre><p><strong>apply()和call()的异同</strong></p>
+<ol>
+<li>这两个方法都是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。</li>
+<li>apply()接受两个参数：一个是函数运行的作用域，另一个是参数数组(可以是数组实例也可以是arguments对象)</li>
+<li>call方法第一个参数没有变化，变化的是其余的参数，都是传递参数，传递给函数的参数需要逐个列举出来。</li>
+<li>apply和call通常用来扩充函数运行的作用域而非单纯的传递参数。</li>
+</ol>
+<pre><code>&lt;script&gt;
+//apply()
+    function sum(num1,num2){
+        return num1+num2;
+    }
+    function applySum(num1,num2){
+        return sum.apply(this,[num1,num2]);
+    }
+    alert(sum(10,20));
+    alert(applySum1(10,20));
+    function applySum2(num1,num2){
+        return sum.apply(this,arguments);//传入arguments对象
+    }
+    alert(applySum2(10,20));
+    //对于apply，call二者而言，作用完全不一样，只是接受参数的方式不太一样。
+    function callSum(num1,num2){
+        return sum.call(this,num1,num2);//传入的是具体的参数
+    }
+    alert(callSum[30,20]);
+    //扩充函数作用域
+    var color=&quot;red&quot;;
+    var o={color:&quot;blue&quot;};
+    function sayColor(){
+        alert(this.color);
+    }
+    sayColor();//弹出red
+    sayColor.call(this);//弹出red
+    sayColor.call(window);//弹出red
+    sayColor.call(o);//弹出blue
+&lt;/script&gt; 
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/11/04/函数/" data-id="cj9knh631000104txgz4e6bhs" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-DOM Style样式对象的详细用法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/10/28/DOM Style样式对象的详细用法/" class="article-date">
@@ -170,7 +372,7 @@ style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/28/DOM Style样式对象的详细用法/" data-id="cj9arxm9q0001p8txzdplrees" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/10/28/DOM Style样式对象的详细用法/" data-id="cj9knh5zq000004txndw7jz4e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -215,7 +417,7 @@ style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/14/hello-world/" data-id="cj9arxm9h0000p8txvs3ziaao" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/10/14/hello-world/" data-id="cj9knh636000204tx31pjvgqj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -242,7 +444,7 @@ style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li></ul>
     </div>
   </div>
 
@@ -253,6 +455,10 @@ style标签或单个Style的全部内容  head.style.cssText, oV1.style.cssText 
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/11/04/函数/">函数</a>
+          </li>
         
           <li>
             <a href="/2017/10/28/DOM Style样式对象的详细用法/">DOM Style样式对象的详细用法</a>
